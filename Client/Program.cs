@@ -8,6 +8,7 @@ namespace Client
 {
     public class Program
     {
+        // Coté CLIENT // 
         static void Main(string[] args)
         {
             using (SRGeo.GeoClient geo = new SRGeo.GeoClient())
