@@ -35,5 +35,29 @@ namespace WcfService3
         {
             throw new NotImplementedException();
         }
+
+        // Constructeur par défaut " OBLIGATOIRE" pour la DESERIALISATION en XML
+        public Pays() { }
+
+
+        public Pays (string nom)
+        {
+            this.Nom = nom;
+        }
+
+        public Pays (string nom, string capitale, double nbHabitants) : this (nom)
+        {
+            this.Capitale = capitale;
+            this.NbHabitants = nbHabitants;
+        }
+
+        
+        public override string ToString()
+        {
+            return "Le Pays : " + Nom + " a pour capitale " + Capitale + " et pour nombre d'habitants " + NbHabitants;
+        }
+
+
+
     }
 }

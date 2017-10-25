@@ -23,7 +23,6 @@ namespace WcfService3
         List<string> GetNomsPaysAsXml();  
 
 
-
         [OperationContract]
         [WebGet(UriTemplate = "Pays/{nom}")] 
         Pays GetInfosPays(string nom);

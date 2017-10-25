@@ -9,6 +9,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RestSharp;
+using WcfService3;
 
 namespace WebIHM
 {
@@ -21,9 +23,10 @@ namespace WebIHM
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(new Uri("http://localhost:5000/Service1.svc/Pays", UriKind.Absolute));
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(new Uri("http://user23.2isa.org/Service1.svc/Pays", UriKind.Absolute));
             req.BeginGetResponse(new AsyncCallback(fnReponse), req);
         }
+
                       
         private void fnReponse(IAsyncResult ar)
         {
@@ -45,6 +48,77 @@ namespace WebIHM
             }
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string URL_SERVICE = "http://user23.2isa.org/Service1.svc";
+            RestClient client = new RestClient(URL_SERVICE);
+
+            // METHODE 1 - Page 11 sur 20 - Doc
+
+            List<string> listePays = null;
+            var request = new RestRequest("Pays", Method.GET);
+            var response = client.Execute<List<string>>(request);
+            if (response.ResponseStatus == ResponseStatus.Completed)
+            {
+                listePays = response.Data;
+
+                foreach (string retour in listePays)
+                {
+                    listBox1.Items.Add(retour);
+                }
+            }            
+        }       
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string URL_SERVICE = "http://user23.2isa.org/Service1.svc";
+            RestClient client = new RestClient(URL_SERVICE);
+
+            // METHODE 2 - Page 12 sur 20 - Doc
+
+            List<string> listePays = null;
+            var request = new RestRequest("Pays", Method.GET);
+
+            request.AddQueryParameter("format", "json");
+
+            var response = client.Execute<List<string>>(request);
+
+            if (response.ResponseStatus == ResponseStatus.Completed)
+            {
+                listePays = response.Data;
+
+                foreach (string retour in listePays)
+                {
+                    listBox2.Items.Add(retour);
+                }               
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string URL_SERVICE = "http://user23.2isa.org/Service1.svc";
+            RestClient client = new RestClient(URL_SERVICE);
+
+            // METHODE 3 - Page 12 sur 20 - Doc
+
+            Pays pays = null;
+            string nom = "France";
+
+            var request = new RestRequest("Pays/{nom}", Method.GET);
+
+            request.AddParameter("nom", nom, ParameterType.UrlSegment);
+
+            var response = client.Execute<Pays>(request);
+
+            if (response.ResponseStatus == ResponseStatus.Completed)
+            {
+                pays = response.Data;
+
+                listBox3.Items.Add(pays.Nom);
+                listBox3.Items.Add(pays.Capitale);
+                listBox3.Items.Add(pays.NbHabitants);
+            }
+        }
     }
 }
